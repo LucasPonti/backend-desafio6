@@ -31,26 +31,27 @@ io.on('connection', async  socket => {
     horaActual = new Date().getHours();
     minActual = new Date().getMinutes();
     mensajes.hora = horaActual + ':' + minActual;
-    const algo = [];
-    algo.push(mensajes);
+    messages.push(mensajes);
     mens.save(mensajes);
     io.sockets.emit('messages', messages);
-    
-    
    });
+
+   
 
    //productos
    socket.emit('productos' , productos);
    console.log(productos);
    
    socket.on('new-producto', async producto => {
-        // productos.push(producto);
+        productos.push(producto);
         await prod.save(producto)
-        await prod.getAll();
         io.sockets.emit('productos', productos);
    });
-
+   
+   
 });
+
+
 
 //--------------------------------------------
 // agrego middlewares

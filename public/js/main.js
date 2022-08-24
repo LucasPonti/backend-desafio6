@@ -13,7 +13,7 @@ formAgregarProducto.addEventListener('submit', e => {
     };
 
     socket.emit('new-producto', producto);
-    return false;
+   
 })
 
 socket.on('productos', async (productos) => {
@@ -62,6 +62,7 @@ socket.on('messages', data => {
     }).join('');
     
     document.getElementById('messages').innerHTML = mensajesHTML;
+    
 })
 
 
