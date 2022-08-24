@@ -51,6 +51,7 @@ formPublicarMensaje.addEventListener('submit', e => {
     socket.emit('new-message', mensaje);
     formPublicarMensaje.reset()
     inputMensaje.focus()
+    
 })
 
 socket.on('messages', data => {

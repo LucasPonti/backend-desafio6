@@ -15,59 +15,14 @@ const io = new Socket(httpServer);
 const prod = new ContenedorArchivo(); 
 const mens = new ContenedorMemoria();
 
-
-const messages = [
-    {
-        username: "Alejandro",
-        message: "Hola!! que tal?"
-    },
-    {
-        username: "Juan",
-        message: "Hola!! Muy bien!"
-    },
-    {
-        username: "Facundo",
-        message: "Genial!!!"
-    },
-    {
-        username: "Alejandro",
-        message: "Hola!! que tal?"
-    },
-    {
-        username: "Juan",
-        message: "Hola!! Muy bien!"
-    },
-    {
-        username: "Facundo",
-        message: "Genial!!!"
-    },
-    {
-        username: "Alejandro",
-        message: "Hola!! que tal?"
-    },
-    {
-        username: "Juan",
-        message: "Hola!! Muy bien!"
-    },
-    {
-        username: "Facundo",
-        message: "Genial!!!"
-    }
-];
-
-const productos = [{
-    title: 'escuadra',
-    price: 5000,
-    thumbnail: 'www.askdjnbaskdebugger.com'
-}
-];
-
 //--------------------------------------------
 // configuro el socket
 app.use(express.static('public'));
 
-io.on('connection', async socket => {
+io.on('connection',  socket => {
    console.log('Nuevo cliente conectado'); 
+    const productos = prod.getAll();
+    const messages = mens.getAll();
 
    socket.emit('messages' , messages);
     console.log(messages);
@@ -76,18 +31,18 @@ io.on('connection', async socket => {
     horaActual = new Date().getHours();
     minActual = new Date().getMinutes();
     mensajes.hora = horaActual + ':' + minActual;
-    messages.push(mensajes);
+    // messages.push(mensajes);
+    mens.save(mensajes);
     io.sockets.emit('messages', messages);
    });
 
    //productos
-//    const productos = await prod.listarAll()
    socket.emit('productos' , productos);
    console.log(productos);
    
    socket.on('new-producto',  producto => {
-        //  productos.save(data);
-        productos.push(producto)
+        // productos.push(producto);
+        prod.save(producto)
         io.sockets.emit('productos', productos);
    });
 
