@@ -1,55 +1,53 @@
+const {promises: fs} = require('fs');
+
+let array = [];
+
 class ContenedorArchivo{
     constructor(){
-        this.productos = [],
-        this.id = 1
+        this.nombreArchivo = 'Archivos';
     }
 
-    save(obj){
+    async save(obj){
         try {
-            obj.id = this.id;
-            this.productos = [...this.productos, obj];
-            this.id ++;
+            array = [...array, obj];
+            await fs.writeFile('./'+this.nombreArchivo+'.txt', JSON.stringify(array)+'\n'); 
         } catch (error) {
             console.log('Hubo un error en Save');
         }
     }
     
-     getById(id){
+    async  getById(id){
         try {
-           const producto =  this.getAll();
-           const productsById = producto.find(p => p.id == id);
-           return productsById;  
-        } catch (error) {
-            console.log('Hubo un error en getById')
-        }
+            const producto = await this.getAll();
+            const productsById = producto.find(p => p.id === id);
+            return productsById;  
+         } catch (error) {
+             console.log('Hubo un error en getById')
+         }
     }
 
-     getAll(){
+     async getAll(){
         try {
-            console.log(JSON.stringify(this.productos));
-            return JSON.parse(JSON.stringify(this.productos));
+            const productos = await fs.readFile('./'+this.nombreArchivo+'.txt', 'utf8');
+            return JSON.parse(productos);
         } catch (error) {
             console.log('Hubo un error en GetAll');
         }
     }
 
-    update(prod, id){
+     async deleteById(id){
         try {
-            prod.id = id;
-            this.productos[id - 1] = prod; 
-        } catch (error) {
-           console.log(error) 
-        }
+            const producto = await this.getAll();
+            const productsById = producto.filter(p => p.id != id);
+            await fs.writeFile('./'+this.nombreArchivo+'.txt', JSON.stringify(productsById));  
+          } catch (error) {
+             console.log('Hubo un error en deleteById'); 
+          }
     }
-
-     deleteById(id){
-        try {
-          const producto =  this.getAll();
-          const productsById = producto.filter(p => p.id != id); 
-          this.productos = productsById;
-        } catch (error) {
-           console.log('Hubo un error en deleteById'); 
-        }
+    
+    async deleteAll(){
+        array = [];
+        const productos = await fs.writeFile('./'+this.nombreArchivo+'.txt', JSON.stringify(array));
     }
     
 }

@@ -19,9 +19,9 @@ const mens = new ContenedorMemoria();
 // configuro el socket
 app.use(express.static('public'));
 
-io.on('connection',  socket => {
+io.on('connection', async  socket => {
    console.log('Nuevo cliente conectado'); 
-    const productos = prod.getAll();
+    const productos = await prod.getAll();
     const messages = mens.getAll();
 
    socket.emit('messages' , messages);
@@ -31,18 +31,22 @@ io.on('connection',  socket => {
     horaActual = new Date().getHours();
     minActual = new Date().getMinutes();
     mensajes.hora = horaActual + ':' + minActual;
-    // messages.push(mensajes);
+    const algo = [];
+    algo.push(mensajes);
     mens.save(mensajes);
     io.sockets.emit('messages', messages);
+    
+    
    });
 
    //productos
    socket.emit('productos' , productos);
    console.log(productos);
    
-   socket.on('new-producto',  producto => {
+   socket.on('new-producto', async producto => {
         // productos.push(producto);
-        prod.save(producto)
+        await prod.save(producto)
+        await prod.getAll();
         io.sockets.emit('productos', productos);
    });
 

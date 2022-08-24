@@ -1,0 +1,1 @@
+[{"title":"asd2","price":"7000","thumbnail":"https://es.wikipedia.org/wiki/Escuadra"},{"title":"asd","price":"8000","thumbnail":"https://es.wikipedia.org/wiki/Escuadra"}]
